@@ -19,8 +19,13 @@ export default function TabLayout() {
                 tabBarStyle: Platform.select({
                     ios: {
                         position: 'absolute',
+                        paddingTop: 10,
                     },
-                    default: {},
+                    default: {
+                        height: 70,
+                        paddingTop: 12,
+                        paddingBottom: 12,
+                    },
                 }),
             }}>
 
