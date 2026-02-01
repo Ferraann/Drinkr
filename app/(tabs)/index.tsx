@@ -18,6 +18,13 @@ export default function HomeScreen() {
     setMyPoints(myPoints + amount);
   };
 
+  // DATOS DE EJEMPLO PARA LA ACTIVIDAD RECIENTE
+  const recentActivity = [
+    { id: 1, name: 'Lucía', action: 'se tomó una Copa', time: 'Hace 5 min', points: '+2', icon: 'wine' },
+    { id: 2, name: 'Marcos', action: 'se tomó una Caña', time: 'Hace 12 min', points: '+1', icon: 'beer' },
+    { id: 3, name: 'Elena', action: 'se tomó un Shot', time: 'Hace 20 min', points: '+3', icon: 'flame' },
+  ];
+
   return (
       <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
 
@@ -64,16 +71,13 @@ export default function HomeScreen() {
               </View>
             </View>
 
-            {/* --- CAJA GRANDE --- */}
+            {/* --- CAJA GRANDE (TU MARCADOR) --- */}
             <View style={[styles.bigBox, { backgroundColor: boxBackgroundColor }]}>
-
               <View style={styles.bigBoxHeader}>
                 <View style={{justifyContent: 'center'}}>
                   <ThemedText type="subtitle" style={{color: '#FF9F1C'}}>Tu Marcador</ThemedText>
                   <ThemedText type="defaultSemiBold" style={{opacity: 0.6}}>Javi</ThemedText>
                 </View>
-
-                {/* AQUI ESTABA EL PROBLEMA */}
                 <ThemedText style={styles.score}>{myPoints}</ThemedText>
               </View>
 
@@ -104,6 +108,39 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </View>
             </View>
+
+            {/* --- ACTIVIDAD RECIENTE --- */}
+            <ThemedText type="subtitle" style={{ marginBottom: 15, marginLeft: 5 }}>Actividad del Grupo</ThemedText>
+
+            <View style={[styles.activityContainer, { backgroundColor: boxBackgroundColor }]}>
+              {recentActivity.map((item, index) => (
+                  <View key={item.id} style={[
+                    styles.activityRow,
+                    // Añadimos borde abajo a todos menos al último
+                    index < recentActivity.length - 1 && { borderBottomWidth: 1, borderBottomColor: 'rgba(150,150,150,0.1)' }
+                  ]}>
+                    {/* Icono Redondo */}
+                    <View style={styles.activityIcon}>
+                      {/* @ts-ignore */}
+                      <Ionicons name={item.icon} size={20} color="#555" />
+                    </View>
+
+                    {/* Textos */}
+                    <View style={{ flex: 1 }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+                        <ThemedText style={{ color: '#FF9F1C', fontWeight: 'bold' }}>{item.points}</ThemedText>
+                      </View>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }}>
+                        <ThemedText style={{ fontSize: 12, opacity: 0.6 }}>{item.action}</ThemedText>
+                        <ThemedText style={{ fontSize: 12, opacity: 0.4 }}>{item.time}</ThemedText>
+                      </View>
+                    </View>
+                  </View>
+              ))}
+            </View>
+
+            <View style={{ height: 100 }} />
 
           </ScrollView>
         </ThemedView>
@@ -218,12 +255,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.05)',
   },
-  // ESTILO ARREGLADO
   score: {
     fontSize: 48,
     fontWeight: 'bold',
     lineHeight: 56,
     includeFontPadding: false,
     textAlignVertical: 'center',
+  },
+
+  // --- NUEVOS ESTILOS PARA ACTIVIDAD ---
+  activityContainer: {
+    borderRadius: 24,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  activityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    gap: 15,
+  },
+  activityIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(200,200,200,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
