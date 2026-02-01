@@ -1,98 +1,154 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
+import { StyleSheet, Image, View, TouchableOpacity, ScrollView, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const backgroundColor = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  // Creamos un color específico para las cajas:
+  // Un gris muy clarito en modo claro, y un gris oscuro en modo oscuro
+  const boxBackgroundColor = useThemeColor({ light: '#F5F5F5', dark: '#2A2A2A' }, 'background');
+
+  return (
+      <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
+
+        {/* --- HEADER --- */}
+        <View style={[styles.headerContainer, { backgroundColor }]}>
+          <View style={styles.leftGroup}>
+            <Image
+                source={require('@/assets/images/isotipo.png')}
+                style={styles.logo}
+            />
+            <ThemedText type="title" style={{ fontSize: 24, lineHeight: 32 }}>Drinkr</ThemedText>
+          </View>
+
+          <View style={styles.rightGroup}>
+            <TouchableOpacity style={styles.orangeButton} onPress={() => alert('Etiqueta')}>
+              <Ionicons name="pricetag" size={20} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.blackButton} onPress={() => alert('Añadir')}>
+              <Ionicons name="add" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* --- BODY --- */}
+        <ThemedView style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+
+            {/* CONTENEDOR DE LAS CAJAS */}
+            <View style={styles.boxesContainer}>
+
+              {/* --- CAJA 1: Puntos --- */}
+              <View style={[styles.box, { backgroundColor: boxBackgroundColor }]}>
+                <View style={styles.boxHeader}>
+                  {/* Icono de estadísticas en el color del texto */}
+                  <Ionicons name="stats-chart" size={18} color={textColor} />
+                  <ThemedText type="defaultSemiBold" style={{fontSize: 14}}>Puntos</ThemedText>
+                </View>
+                {/* Número grande */}
+                <ThemedText type="title" style={{fontSize: 28}}>120</ThemedText>
+              </View>
+
+              {/* --- CAJA 2: Líder --- */}
+              <View style={[styles.box, { backgroundColor: boxBackgroundColor }]}>
+                <View style={styles.boxHeader}>
+                  {/* Icono Trofeo Naranja */}
+                  <Ionicons name="trophy" size={18} color="#FF9F1C" />
+                  <ThemedText type="defaultSemiBold" style={{fontSize: 14}}>Líder</ThemedText>
+                </View>
+                {/* Nombre del líder */}
+                <ThemedText type="title" style={{fontSize: 22}} numberOfLines={1}>Javi</ThemedText>
+              </View>
+
+            </View>
+
+          </ScrollView>
+        </ThemedView>
+      </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  safeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  },
+  leftGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
   },
-  stepContainer: {
-    gap: 8,
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  rightGroup: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  orangeButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FF9F1C',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  blackButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  scrollContent: {
+    padding: 20,
+  },
+
+  // --- NUEVOS ESTILOS PARA LAS CAJAS ---
+  boxesContainer: {
+    flexDirection: 'row',
+    gap: 15,
+    marginBottom: 20,
+  },
+  box: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 16,
+    justifyContent: 'space-between',
+    minHeight: 100,
+  },
+  boxHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+    opacity: 0.8,
   },
 });
