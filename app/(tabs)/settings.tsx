@@ -131,7 +131,6 @@ export default function SettingsScreen() {
                     />
                 </View>
 
-
                 {/* --- 3. SECCIÓN GRUPO --- */}
                 <ThemedText style={styles.sectionTitle}>Grupo</ThemedText>
 
@@ -141,17 +140,16 @@ export default function SettingsScreen() {
                         title="Gestionar Grupo"
                         subtitle="Ver miembros: 8 amigos"
                         color="#2196F3"
-                        onPress={() => alert('Ver lista de amigos')}
+                        onPress={() => router.push('/group-manage')}
                     />
                     <SettingItem
                         icon="qr-code"
                         title="Invitar Amigos"
                         subtitle="Compartir código de grupo"
                         color="#9C27B0"
-                        onPress={() => alert('Mostrar QR')}
+                        onPress={() => router.push('/group-invite')}
                     />
                 </View>
-
 
                 {/* --- 4. ZONA DE PELIGRO --- */}
                 <ThemedText style={styles.sectionTitle}>Sesión</ThemedText>
