@@ -95,7 +95,7 @@ export default function SettingsScreen() {
                 {/* --- 1. TARJETA DE PERFIL --- */}
                 <View style={[styles.profileCard, { backgroundColor: cardColor }]}>
                     <View style={styles.avatarLarge}>
-                        <ThemedText style={{ fontSize: 32, fontWeight: 'bold', color: '#555' }}>J</ThemedText>
+                        <ThemedText style={styles.avatarText}>J</ThemedText>
                     </View>
                     <View style={{ marginTop: 10, alignItems: 'center' }}>
                         <ThemedText type="subtitle">Javi</ThemedText>
@@ -230,7 +230,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         borderWidth: 4,
-        borderColor: '#fff', // Borde blanco para resaltar sobre gris
+        borderColor: '#fff',
+    },
+    avatarText: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#555',
+        lineHeight: 36,
+        includeFontPadding: false,
+        textAlignVertical: 'center',
     },
     editButton: {
         marginTop: 15,
