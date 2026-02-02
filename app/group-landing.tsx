@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View, Image, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, TextInput, TouchableOpacity, View, Image, KeyboardAvoidingView, Platform, ScrollView, Alert, BackHandler } from 'react-native'; // <--- 2. Importamos BackHandler
 import { Stack, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -16,6 +16,19 @@ export default function GroupLandingScreen() {
 
     const [code, setCode] = useState('');
 
+    // --- BLOQUEO DEL BOTÓN ATRÁS (ANDROID) ---
+    useEffect(() => {
+        const onBackPress = () => {
+            // Retornar 'true' le dice al sistema "Yo manejo el evento",
+            // y como no hacemos nada, el botón atrás no hace nada.
+            return true;
+        };
+
+        const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        return () => subscription.remove();
+    }, []);
+
     const handleJoin = () => {
         if (code.length < 3) {
             Alert.alert("Código inválido", "Por favor introduce un código de grupo válido.");
@@ -23,7 +36,10 @@ export default function GroupLandingScreen() {
         }
         // TODO: Lógica Firestore para unirse
         Alert.alert("¡Éxito!", `Te has unido al grupo con código ${code}`, [
-            { text: "Continuar", onPress: () => router.dismissAll() } // Vuelve al inicio
+            {
+                text: "Continuar",
+                onPress: () => router.replace('/(tabs)')
+            }
         ]);
     };
 
@@ -32,6 +48,7 @@ export default function GroupLandingScreen() {
             <Stack.Screen
                 options={{
                     headerShown: false,
+                    gestureEnabled: false,
                 }}
             />
 
@@ -81,7 +98,7 @@ export default function GroupLandingScreen() {
 
                         <TouchableOpacity
                             style={styles.createButton}
-                            onPress={() => router.push('/group-create')} // Reutilizamos la pantalla de crear que hicimos antes
+                            onPress={() => router.push('/group-create')}
                         >
                             <ThemedText style={{color: '#FF9F1C', fontWeight: 'bold'}}>Crear un Grupo</ThemedText>
                         </TouchableOpacity>
@@ -97,13 +114,6 @@ const styles = StyleSheet.create({
     container: {
         padding: 24,
         paddingTop: 60,
-    },
-    closeButton: {
-        position: 'absolute',
-        top: 50,
-        right: 20,
-        zIndex: 10,
-        padding: 10,
     },
     card: {
         padding: 20,
