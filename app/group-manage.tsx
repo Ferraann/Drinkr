@@ -48,9 +48,16 @@ export default function GroupManageScreen() {
     };
 
     const handleLeaveGroup = () => {
-        Alert.alert("Salir del Grupo", "¿Estás seguro? Perderás tu historial en este grupo.", [
+        Alert.alert("Salir del Grupo", "¿Estás seguro? Tendrás que unirte de nuevo para ver los datos.", [
             { text: "Cancelar", style: "cancel" },
-            { text: "Salir", style: "destructive", onPress: () => router.back() }
+            {
+                text: "Salir",
+                style: "destructive",
+                onPress: () => {
+                    // 1. Aquí iría la lógica de Firebase para salir: await leaveGroup(...)
+                    router.replace('/group-landing');
+                }
+            }
         ]);
     };
 
